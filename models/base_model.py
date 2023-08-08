@@ -2,6 +2,7 @@
 """This module contains the base class for the AirBnB clone"""
 import uuid
 import datetime
+from models import storage
 
 
 class BaseModel():
@@ -27,6 +28,7 @@ class BaseModel():
             # setting the dates to the current date
             self.created_at = datetime.datetime.now()
             self.updated_at = datetime.datetime.now()
+            storage.new(self)  # adding a call to the method new(self)
 
     def __str__(self):
         """returns a str representation of the object"""
@@ -36,6 +38,7 @@ class BaseModel():
     def save(self):
         """Updates updated_at with the current datetime"""
         self.updated_at = datetime.datetime.now()
+        storage.save()  # calling save method on storage from models/__init__
 
     def to_dict(self):
         """Returns a dict of key/value pairs of the __dict__ instance"""
