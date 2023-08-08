@@ -7,12 +7,26 @@ import datetime
 class BaseModel():
     """Defines all the attributes and methods shared in the program"""
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """Initializing the class"""
-        self.id = str(uuid.uuid4())  # getting a random uuid for id
-        # setting the dates to the current date
-        self.created_at = datetime.datetime.now()
-        self.updated_at = datetime.datetime.now()
+        if kwargs is not None and kwargs != {}:
+            for key in kwargs:
+                if key == "created_at":
+                    # strptime creates a datetime obj from a str repr of date
+                    # creating datetime from the dict value string
+                    # created_at and updated_at
+                    self.__dict__["created_at"] = datetime.datetime.strptime(
+                            kwargs["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
+                elif key == "updated_at":
+                    self.__dict__["updated_at"] = datetime.datetime.strptime(
+                            kwargs["updated_at"], "%Y-%m-%dT%H:%M:%S.%f")
+                else:
+                    self.__dict__[key] = kwargs[key]
+        else:
+            self.id = str(uuid.uuid4())  # getting a random uuid for id
+            # setting the dates to the current date
+            self.created_at = datetime.datetime.now()
+            self.updated_at = datetime.datetime.now()
 
     def __str__(self):
         """returns a str representation of the object"""
